@@ -51,7 +51,7 @@ except Exception:
 
 # ===================== PAGE SETUP =====================
 st.set_page_config(page_title="PDF → TXT → Consolidate → Chat", layout="wide")
-st.title("UNICEF COARs:  📄 TEXT LAB")
+st.title("UNICEF COARs:  📄TEXT LAB")
 
 # ===================== PDF BACKEND =====================
 BACKEND = None

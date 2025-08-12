@@ -1,0 +1,7 @@
+*.ipynb
+*.pdf
+data/
+datasets/
+models/
+.cache/
+**/__pycache__/
