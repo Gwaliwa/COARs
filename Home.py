@@ -51,7 +51,7 @@ except Exception:
 
 # ===================== PAGE SETUP =====================
 st.set_page_config(page_title="PDF → TXT → Consolidate → Chat", layout="wide")
-st.title("UNICEF COARs:  📄 NLP 💬 Generative AI")
+st.title("UNICEF COARs:  📄 TEXT LAB")
 
 # ===================== PDF BACKEND =====================
 BACKEND = None
@@ -1004,3 +1004,79 @@ with tab_options:
     st.markdown("- For best PDF extraction, install **PyMuPDF** (`pip install pymupdf`).")
     st.markdown("- For offline translation, install **Argos Translate** and language models (e.g. es→en).")
     st.markdown("- If you’re on Python 3.13, **SBERT may require build tools**. Keep it off or use Python 3.11 for ready-made wheels.")
+
+    # --- Added: explanatory content for Options / About (docs only; no logic changes) ---
+    st.divider()
+    st.markdown("### What these options do")
+    st.markdown(
+        "- **lowercase / remove newlines**: light cleaning to improve matching and readability.\n"
+        "- **include full file path**: adds a `filepath` column in the consolidated CSV for traceability.\n"
+        "- **auto‑detect language & translate**: tries offline Argos Translate to convert non‑EN text to English.\n"
+        "- **Max chars per section**: truncate long sections for faster processing.\n"
+        "- **Use SBERT semantic reranking**: improves retrieval in Chatroom by re‑scoring with sentence embeddings (if model available).\n"
+        "- **Hybrid weight (SBERT vs BM25)**: 0 = lexical only (BM25/TF‑IDF), 1 = semantic only (SBERT)."
+    )
+
+    st.markdown("### Recommended presets")
+    st.markdown(
+        "- **Small sets (<200 docs)**: keep defaults. Hybrid weight `0.6`.\n"
+        "- **Medium (200–2k)**: consider truncating sections (e.g., 8–12k chars). Hybrid `0.6–0.7`.\n"
+        "- **Large (>2k)**: stronger truncation (2–6k chars). If GPU not available, keep SBERT off."
+    )
+
+    st.markdown("### Tips")
+    st.markdown(
+        "- If you see memory errors, lower truncation limits or turn off SBERT.\n"
+        "- If answers feel generic, raise the **Hybrid weight** or add more keywords to your query.\n"
+        "- If headings are inconsistent across PDFs, adjust the regex patterns in `SECTION_ALIASES`."
+    )
+
+    st.divider()
+    st.markdown("## ℹ️ About")
+    st.markdown(
+        "This tool helps you turn COAR PDFs into analyzable text, consolidate by common headings, and explore the corpus in a **private chatroom**.\n"
+        "It’s designed for evaluation/knowledge teams who need quick **themes, tone, and evidence** across many reports."
+    )
+
+    st.markdown("#### Key features")
+    st.markdown(
+        "- PDF → TXT (local; no external APIs)\n"
+        "- Consolidation into **context / contributions / collaborations / innovations**\n"
+        "- Region parsing + manual overrides (Unknowns never disappear)\n"
+        "- Private chat over the consolidated text (BM25/TF‑IDF + optional SBERT)\n"
+        "- CSV export of consolidated data"
+    )
+
+    st.markdown("#### How it works")
+    st.markdown(
+        "1) Convert PDFs to TXT (saved in a temp folder)\n"
+        "2) Consolidate text into per‑heading columns + auto language detect/translate (optional)\n"
+        "3) Assign/override UNICEF regions for Unknowns\n"
+        "4) Ask questions in the Chatroom (retrieval uses BM25/TF‑IDF; SBERT can rerank if available)\n"
+        "5) Download the consolidated CSV"
+    )
+
+    st.markdown("#### Data privacy & runtime")
+    st.markdown(
+        "- Everything runs **locally**; no internet calls by default.\n"
+        "- First SBERT load may download a model once (then cached). If unavailable, the app falls back gracefully."
+    )
+
+    st.markdown("#### Limitations & tips")
+    st.markdown(
+        "- Very large corpora can be slow on CPU; consider sampling or truncation.\n"
+        "- Heading patterns vary by country/year—tweak `SECTION_ALIASES` if extraction misses sections.\n"
+        "- For multilingual sets, install **Argos Translate** models (e.g., `es→en`)."
+    )
+
+    st.markdown("#### Tech stack")
+    st.markdown(
+        "- **UI**: Streamlit\n"
+        "- **Retrieval**: rank_bm25, TF‑IDF\n"
+        "- **Embeddings (optional)**: sentence‑transformers (e.g., `all‑MiniLM‑L6‑v2`)\n"
+        "- **PDF**: PyMuPDF / pdfplumber / PyPDF2\n"
+        "- **Lang**: langdetect, Argos Translate"
+    )
+
+    st.markdown("#### Credits")
+    st.caption("Built with open‑source libraries; follow your organization’s data handling policies.")
